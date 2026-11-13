@@ -1,0 +1,31 @@
+name: Merge Dependabot minor and patch updates
+on:
+  workflow_run:
+    workflows: ["Check starter"]
+    types: [completed]
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+concurrency:
+  group: dependabot-merge-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      # workflow_run's github.sha is on the default branch, never the PR branch.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            const mergeUpdates = require('./.github/scripts/merge-dependabot.cjs');
+            await mergeUpdates({ github, context, core });
