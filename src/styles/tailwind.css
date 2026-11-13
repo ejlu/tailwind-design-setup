@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "./foundations.css";
+@import "./themes/warm.css";
+@import "./themes/crisp.css";
+@import "./tokens.css";
+
+@layer base {
+  body {
+    margin: 0;
+  }
+  .ui-theme {
+    font-family: var(--ui-font-sans);
+    color: var(--ui-fg);
+    background: var(--ui-canvas);
+    color-scheme: var(--ui-color-scheme);
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  button:not(:disabled),
+  [role="switch"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--ui-selected);
+    color: var(--ui-on-selected);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ui-theme *,
+    .ui-theme *::before,
+    .ui-theme *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
