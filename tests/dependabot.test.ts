@@ -12,7 +12,7 @@ function fixture() {
     user: { login: "dependabot[bot]", type: "Bot" },
     head: {
       sha: "tested-sha",
-      ref: "dependabot/npm_and_yarn/npm-minor-and-patch-1234abcd",
+      ref: "dependabot/npm_and_yarn/react-20.0.0",
       repo: { full_name: "ejlu/tailwind-design-setup" },
     },
     base: { ref: "main" },
@@ -48,7 +48,10 @@ describe("Dependabot auto-merge gate", () => {
   it.each([
     "dependabot/npm_and_yarn/npm-minor-and-patch-1234abcd",
     "dependabot/github_actions/actions-minor-and-patch-1234abcd",
-  ])("merges a checked group with an exact-SHA lease: %s", async (branch) => {
+    "dependabot/npm_and_yarn/react-20.0.0",
+    "dependabot/github_actions/actions/checkout-7",
+    "dependabot/github_actions/actions/setup-node-7",
+  ])("merges a checked update with an exact-SHA lease: %s", async (branch) => {
     const f = fixture();
     f.pull.head.ref = branch;
     await mergeUpdates(f);
@@ -93,15 +96,15 @@ describe("Dependabot auto-merge gate", () => {
       },
     ],
     [
-      "major upgrade",
+      "unsupported ecosystem",
       (f) => {
-        f.pull.head.ref = "dependabot/npm_and_yarn/react-20.0.0";
+        f.pull.head.ref = "dependabot/docker/node-26";
       },
     ],
     [
-      "wrong ecosystem group",
+      "non-Dependabot branch",
       (f) => {
-        f.pull.head.ref = "dependabot/npm_and_yarn/actions-minor-and-patch-123";
+        f.pull.head.ref = "feature/package-update";
       },
     ],
     [

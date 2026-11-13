@@ -29,11 +29,8 @@ module.exports = async function mergeUpdates({ github, context, core }) {
       repo,
       pull_number: candidate.number,
     });
-    // These prefixes match only the minor/patch groups in dependabot.yml.
-    const groupedUpdate =
-      /^dependabot\/(?:npm_and_yarn\/npm-minor-and-patch|github_actions\/actions-minor-and-patch)-/.test(
-        pull.head.ref,
-      );
+    // Accept grouped and individual updates, including majors, for our ecosystems.
+    const supportedUpdate = /^dependabot\/(?:npm_and_yarn|github_actions)\//.test(pull.head.ref);
     if (
       pull.state !== "open" ||
       pull.draft ||
@@ -42,7 +39,7 @@ module.exports = async function mergeUpdates({ github, context, core }) {
       pull.head.repo?.full_name !== repository ||
       pull.base.ref !== context.payload.repository.default_branch ||
       pull.head.sha !== run.head_sha ||
-      !groupedUpdate
+      !supportedUpdate
     ) {
       continue;
     }

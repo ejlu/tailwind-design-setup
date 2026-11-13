@@ -123,9 +123,9 @@ Automated checks are a baseline. Before production adoption, review actual conte
 
 ## Dependency updates
 
-Dependabot checks npm packages and GitHub Actions every Monday at 09:00 America/New_York once `.github/dependabot.yml` is merged into the default branch. It updates pinned npm versions and the lockfile. Minor and patch updates are grouped per ecosystem and squash-merged automatically after `Check starter` and all reported checks/statuses pass on the current PR head. Major upgrades remain separate PRs for manual review.
+Dependabot checks npm packages and GitHub Actions every Monday at 09:00 America/New_York once `.github/dependabot.yml` is merged into the default branch. It updates pinned npm versions and the lockfile. Minor and patch updates are grouped per ecosystem; major upgrades remain individual PRs. All three update types are eligible for automatic squash-merge after `Check starter` and all reported checks/statuses pass on the current PR head.
 
-The merge workflow runs trusted default-branch code, verifies the Dependabot author and grouped branch, and sends the exact tested SHA to GitHub's merge API. It does not run code or download artifacts from the update PR. Keep the group names in `.github/dependabot.yml` and the allowlist in `.github/scripts/merge-dependabot.cjs` aligned if you rename them. This policy starts once both workflows/configuration are merged into the default branch; no personal token or repository auto-merge setting is needed.
+The merge workflow runs trusted default-branch code, verifies the Dependabot author and npm/GitHub Actions branch, and sends the exact tested SHA to GitHub's merge API. It does not run code or download artifacts from the update PR. If you add another package ecosystem, extend the allowlist in `.github/scripts/merge-dependabot.cjs` too. This policy starts once both workflows/configuration are merged into the default branch; no personal token or repository auto-merge setting is needed. For an existing update whose CI finished before a policy change was merged, re-run its `Check starter` workflow so the merge gate evaluates it again.
 
 ## Structure
 
