@@ -1,4 +1,4 @@
-name: Merge Dependabot minor and patch updates
+name: Merge Dependabot updates
 on:
   workflow_run:
     workflows: ["Check starter"]
