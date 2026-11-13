@@ -1,0 +1,23 @@
+/* Plain CSS: usable without Tailwind or React. */
+:root {
+  --ui-space-group: 1rem;
+  --ui-space-section: 2.5rem;
+  --ui-duration: 160ms;
+  --ui-ease: cubic-bezier(0.2, 0, 0, 1);
+  --ui-control-height: 2.75rem;
+  --ui-control-px: 0.875rem;
+  --ui-control-gap: 0.5rem;
+  --ui-row-py: 1rem;
+}
+[data-ui-density="comfortable"] {
+  --ui-control-height: 2.75rem;
+  --ui-control-px: 0.875rem;
+  --ui-control-gap: 0.5rem;
+  --ui-row-py: 1rem;
+}
+[data-ui-density="compact"] {
+  --ui-control-height: 2.25rem;
+  --ui-control-px: 0.625rem;
+  --ui-control-gap: 0.375rem;
+  --ui-row-py: 0.625rem;
+}

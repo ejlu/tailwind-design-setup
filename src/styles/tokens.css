@@ -1,0 +1,125 @@
+/* Bridge semantic runtime variables to Tailwind v4 utilities. */
+@theme inline {
+  --font-sans: var(--ui-font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --color-canvas: var(--ui-canvas);
+  --color-surface: var(--ui-surface);
+  --color-sunken: var(--ui-sunken);
+  --color-overlay: var(--ui-overlay);
+  --color-fg: var(--ui-fg);
+  --color-muted: var(--ui-muted);
+  --color-border: var(--ui-border);
+  --color-input-border: var(--ui-input-border);
+  --color-action: var(--ui-action);
+  --color-action-hover: var(--ui-action-hover);
+  --color-on-action: var(--ui-on-action);
+  --color-hover: var(--ui-hover);
+  --color-pressed: var(--ui-pressed);
+  --color-selected: var(--ui-selected);
+  --color-on-selected: var(--ui-on-selected);
+  --color-on-selection-border: var(--ui-on-selection-border);
+  --color-selection-border: var(--ui-selection-border);
+  --color-focus: var(--ui-focus);
+  --color-danger: var(--ui-danger);
+  --color-danger-hover: var(--ui-danger-hover);
+  --color-on-danger: var(--ui-on-danger);
+  --color-danger-soft: var(--ui-danger-soft);
+  --color-danger-text: var(--ui-danger-text);
+  --color-success-soft: var(--ui-success-soft);
+  --color-success-text: var(--ui-success-text);
+  --color-warning-soft: var(--ui-warning-soft);
+  --color-warning-text: var(--ui-warning-text);
+  --color-info-soft: var(--ui-info-soft);
+  --color-info-text: var(--ui-info-text);
+  --color-blanket: var(--ui-blanket);
+  --radius-control: var(--ui-radius-control);
+  --radius-panel: var(--ui-radius-panel);
+  --shadow-raised: var(--ui-shadow-raised);
+  --shadow-overlay: var(--ui-shadow-overlay);
+  --spacing-control: var(--ui-control-height);
+  --spacing-control-px: var(--ui-control-px);
+  --spacing-control-gap: var(--ui-control-gap);
+  --spacing-row: var(--ui-row-py);
+  --spacing-group: var(--ui-space-group);
+  --spacing-section: var(--ui-space-section);
+}
+
+/* Full styles, not font sizes alone. Kept separate from HTML heading levels. */
+@utility type-display {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+}
+@utility type-title {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+@utility type-heading {
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  font-weight: 650;
+  letter-spacing: -0.012em;
+}
+@utility type-body {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-label {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+@utility type-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+@utility focus-ring {
+  outline-offset: 3px;
+  &:focus-visible {
+    outline: 2px solid var(--ui-focus);
+  }
+}
+
+/* Radix's hidden form input uses a physical translate; contain it in RTL too. */
+@utility switch-host {
+  position: relative;
+  display: inline-flex;
+  & > input {
+    inset-inline-start: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+  }
+  @media (forced-colors: active) {
+    & > button {
+      forced-color-adjust: none;
+      outline-color: CanvasText;
+      background: Canvas;
+      border-color: ButtonText;
+    }
+    & > button > span {
+      background: ButtonText;
+    }
+    & > button[data-state="checked"] {
+      background: Highlight;
+      border-color: Highlight;
+    }
+    & > button[data-state="checked"] > span {
+      background: HighlightText;
+    }
+  }
+}
