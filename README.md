@@ -121,6 +121,10 @@ Browser tests exercise all eight brand × mode × density combinations, semantic
 
 Automated checks are a baseline. Before production adoption, review actual content, custom colors, long translations, zoom, touch targets, and assistive technology behavior in the browsers your company supports. This starter does not claim complete accessibility conformance.
 
+## Dependency updates
+
+Dependabot checks npm packages and GitHub Actions every Monday at 09:00 America/New_York once `.github/dependabot.yml` is merged into the default branch. Minor and patch updates are grouped per ecosystem; major upgrades remain separate PRs. It updates the pinned npm versions and lockfile and opens PRs for review; this configuration does not enable auto-merge.
+
 ## Structure
 
 ```text
