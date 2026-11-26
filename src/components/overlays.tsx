@@ -73,7 +73,7 @@ export function MenuItem({ className, ...props }: ComponentPropsWithoutRef<typeo
     <M.Item
       {...props}
       className={cn(
-        "type-body flex min-h-control cursor-default items-center gap-2 rounded-control px-control-px outline-none data-[highlighted]:outline-hidden data-[highlighted]:bg-selected data-[highlighted]:text-on-selected data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
+        "type-body flex min-h-control cursor-default items-center gap-2 rounded-control px-control-px outline-none data-[highlighted]:outline-hidden data-[highlighted]:bg-hover data-[highlighted]:text-fg data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
         className,
       )}
     />

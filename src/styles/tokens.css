@@ -48,19 +48,19 @@
 @utility type-display {
   font-size: clamp(2.25rem, 5vw, 3.5rem);
   line-height: 1.08;
-  font-weight: 650;
+  font-weight: var(--ui-weight-heading, 650);
   letter-spacing: -0.045em;
 }
 @utility type-title {
   font-size: 1.5rem;
   line-height: 1.25;
-  font-weight: 650;
+  font-weight: var(--ui-weight-heading, 650);
   letter-spacing: -0.025em;
 }
 @utility type-heading {
   font-size: 1.0625rem;
   line-height: 1.4;
-  font-weight: 650;
+  font-weight: var(--ui-weight-heading, 650);
   letter-spacing: -0.012em;
 }
 @utility type-body {

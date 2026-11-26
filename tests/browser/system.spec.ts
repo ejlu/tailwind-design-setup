@@ -56,6 +56,12 @@ for (const theme of ["warm", "crisp"])
           });
         for (const pair of contrast)
           expect(pair.ratio, `${pair.fg} on ${pair.bg}`).toBeGreaterThanOrEqual(pair.minimum);
+        for (const name of ["Workspace settings", "Workspace profile"]) {
+          await expect(page.getByRole("heading", { name, exact: true })).toHaveCSS(
+            "font-weight",
+            theme === "warm" ? "600" : "700",
+          );
+        }
         const controlHeight = await page
           .getByRole("textbox", { name: "Workspace name" })
           .evaluate((el) => el.getBoundingClientRect().height);
@@ -84,13 +90,17 @@ test("nested dialog and menu preserve scope, keyboard operation and focus return
   expect(
     await dialog.evaluate((el) => el.closest("[data-ui-theme]")?.getAttribute("data-ui-theme")),
   ).toBe("crisp");
+  await expect(dialog.getByRole("heading")).toHaveCSS("font-weight", "700");
   const roleTrigger = dialog.getByRole("button", { name: "Role: Member" });
   await roleTrigger.focus();
   await page.keyboard.press("ArrowDown");
   await expect(page.getByRole("menu")).toBeVisible();
   await expect(page.getByRole("menu")).toHaveCSS("background-color", "rgb(27, 41, 64)");
   await page.keyboard.press("End");
-  await expect(page.getByRole("menuitem", { name: "Guest", exact: true })).toBeFocused();
+  const guest = page.getByRole("menuitem", { name: "Guest", exact: true });
+  await expect(guest).toBeFocused();
+  await expect(guest).toHaveCSS("background-color", "rgb(36, 52, 78)");
+  await expect(guest).toHaveCSS("color", "rgb(241, 245, 255)");
   await page.keyboard.press("Enter");
   await expect(dialog.getByRole("button", { name: "Role: Guest" })).toBeFocused();
   for (let i = 0; i < 5; i++) {
@@ -205,4 +215,33 @@ test("nested modal backdrop covers the viewport and returns focus to its parent"
   await expect(trigger).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(outer).not.toBeVisible();
+});
+
+test("button padding follows the icon at either density and in either direction", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Components", exact: true }).click();
+  const button = (name: string) => page.getByRole("button", { name, exact: true });
+  for (const density of ["comfortable", "compact"]) {
+    await page.getByLabel("Density", { exact: true }).selectOption(density);
+    const full = density === "compact" ? "10px" : "14px";
+    const half = density === "compact" ? "5px" : "7px";
+    const height = density === "compact" ? "36px" : "44px";
+    for (const dir of ["ltr", "rtl"]) {
+      await page.getByLabel("Direction", { exact: true }).selectOption(dir);
+      for (const [name, start, end] of [
+        ["Ghost", full, full],
+        ["Add resource", half, full],
+        ["Continue", full, half],
+        ["Saving", half, full],
+        ["Add item", "0px", "0px"],
+      ]) {
+        await expect(button(name)).toHaveCSS("padding-left", dir === "ltr" ? start : end);
+        await expect(button(name)).toHaveCSS("padding-right", dir === "ltr" ? end : start);
+        await expect(button(name)).toHaveCSS("height", height);
+      }
+      await expect(button("Add item")).toHaveCSS("width", height);
+    }
+  }
 });

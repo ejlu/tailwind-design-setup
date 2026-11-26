@@ -74,13 +74,53 @@ export function Profile() {
 
 ### 3. Choose scope deliberately
 
-Wrap each application in `ThemeScope`. Nested scopes inherit unspecified settings. Our Dialog, Menu, and Tooltip wrappers use their primitive's Portal with the shared scoped container and remain inside the nearest theme/mode/density/direction scope. This avoids a dark panel opening a light menu. ThemeScope also provides Radix direction. DialogContent creates an inner PortalScope so nested menus stay inside its focus trap and accessibility tree. Custom modal wrappers should do the same.
+Place `ThemeScope` around the part of the application that uses the starter. Nested scopes inherit unspecified settings. Our Dialog, Menu, and Tooltip wrappers use their primitive's Portal with the shared scoped container and remain inside the nearest theme/mode/density/direction scope. This avoids a dark panel opening a light menu. ThemeScope also provides Radix direction. DialogContent creates an inner PortalScope so nested menus stay inside its focus trap and accessibility tree. Custom modal wrappers should do the same.
 
 Put `lang` on your document. Set `dir` on ThemeScope, and set it on the document too when the entire application is RTL. Use logical spacing utilities (`ps`, `pe`, `ms`, `me`, `start`, `end`). Avoid transformed/clipped ancestors around overlay hosts; a real application with a dedicated global overlay layer may need a portal adapter that reproduces the scope there.
 
 Switch `className` styles the inner control button; apply flex/grid placement classes to its containing row or wrapper.
 
 Typography styles are visual roles, independent of heading semantics: choose the appropriate `h1`–`h6` element, then apply `type-title` or `type-heading`. Edit the named styles as a set when a font needs different metrics. All built-in fonts are local fallbacks; no font request is made.
+
+#### Migrate one settings panel
+
+Suppose an account page already has a billing panel. Wrap the new workspace settings panel and its surrounding padding in one scope. The wrapper paints the canvas between the card and the edge of the panel. The card supplies the surface behind its heading and actions. The page and its billing panel keep their host styles.
+
+```tsx
+import {
+  Button,
+  Card,
+  Menu,
+  MenuContent,
+  MenuItem,
+  MenuTrigger,
+  ThemeScope,
+} from "./design-system";
+import { BillingPanel } from "./BillingPanel";
+
+export function AccountSettings({ editName }: { editName: () => void }) {
+  return (
+    <main>
+      <ThemeScope theme="warm" mode="dark" className="p-6">
+        <Card>
+          <h2 className="type-heading mb-3">Workspace settings</h2>
+          <Menu>
+            <MenuTrigger asChild>
+              <Button variant="secondary">Workspace actions</Button>
+            </MenuTrigger>
+            <MenuContent>
+              <MenuItem onSelect={editName}>Edit workspace name</MenuItem>
+            </MenuContent>
+          </Menu>
+        </Card>
+      </ThemeScope>
+      <BillingPanel />
+    </main>
+  );
+}
+```
+
+For this incremental setup, keep the host reset and load the starter’s `.ui-theme` and scoped reduced-motion styles from step 1. The gallery entry also includes document-wide base rules and Preflight. In DevTools, open **Workspace actions** and find the menu under the panel’s `[data-ui-portal]`. Toggle the panel from dark to light. Its gutter, card, and open menu should all switch together, while the billing panel keeps its original colors and font.
 
 ### 4. Check the host application's CSS
 
@@ -94,14 +134,15 @@ Typography styles are visual roles, independent of heading semantics: choose the
 ## Component conventions
 
 ```tsx
-<Button variant="primary">Continue</Button>
+<Button variant="primary" endIcon={<ArrowRight className="rtl:rotate-180" />}>Continue</Button>
+<Button variant="secondary" startIcon={<Plus />}>Add item</Button>
 <Button variant="secondary">Cancel</Button>
 <Button variant="danger">Delete</Button>
 <Button loading>Saving</Button>
 <IconButton label="Add item"><Plus aria-hidden="true" /></IconButton>
 ```
 
-Buttons default to `type="button"`; opt into submit explicitly. Loading disables activation, keeps the label, and sets `aria-busy`.
+Buttons default to `type="button"`; opt into submit explicitly. Pass decorative icons through `startIcon` or `endIcon`. The icon side gets half the usual inline padding in either text direction. Loading places a spinner in the start slot, keeps the label, disables activation, and sets `aria-busy`. Use `IconButton` with an accessible label for a square icon-only action.
 
 `ActionRow` accepts `leading`, `title`, `description`, and `trailing` slots. Its container is not interactive. Put a real labeled control/link/button in the appropriate slot. `Section` provides a heading and spacing, not a page layout framework; use `level={3}` (2–6 supported) for nested sections.
 
