@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { LoaderCircle } from "lucide-react";
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import { forwardRef, type ReactElement, type ButtonHTMLAttributes } from "react";
 import { cn } from "../lib/cn";
 
 export const buttonVariants = cva(
@@ -20,11 +20,24 @@ export const buttonVariants = cva(
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   loading?: boolean;
+  startIcon?: ReactElement;
+  endIcon?: ReactElement;
 }
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant, className, loading = false, disabled, type = "button", children, ...props },
+  {
+    variant,
+    className,
+    loading = false,
+    disabled,
+    type = "button",
+    startIcon,
+    endIcon,
+    children,
+    ...props
+  },
   ref,
 ) {
+  const leadingIcon = loading ? <LoaderCircle className="animate-spin" /> : startIcon;
   return (
     <button
       {...props}
@@ -32,19 +45,33 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={cn(buttonVariants({ variant }), className)}
+      className={cn(
+        buttonVariants({ variant }),
+        leadingIcon && "ps-[calc(var(--ui-control-px)/2)]",
+        endIcon && "pe-[calc(var(--ui-control-px)/2)]",
+        className,
+      )}
     >
-      {loading && <LoaderCircle aria-hidden="true" className="animate-spin" />}
+      {leadingIcon && (
+        <span aria-hidden="true" className="inline-flex">
+          {leadingIcon}
+        </span>
+      )}
       {children}
+      {endIcon && (
+        <span aria-hidden="true" className="inline-flex">
+          {endIcon}
+        </span>
+      )}
     </button>
   );
 });
 
-export interface IconButtonProps extends Omit<ButtonProps, "aria-label"> {
+export interface IconButtonProps extends Omit<ButtonProps, "aria-label" | "startIcon" | "endIcon"> {
   label: string;
 }
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
-  { label, className, variant = "ghost", ...props },
+  { label, className, variant = "ghost", loading, children, ...props },
   ref,
 ) {
   return (
@@ -52,8 +79,11 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       {...props}
       ref={ref}
       variant={variant}
+      loading={loading}
       aria-label={label}
       className={cn("size-control p-0", className)}
-    />
+    >
+      {loading ? null : children}
+    </Button>
   );
 });

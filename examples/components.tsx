@@ -101,11 +101,10 @@ export function ComponentsExample() {
       </Section>
       <Section title="Actions" description="Small APIs, consistent behavior, explicit intent.">
         <Card className="flex flex-wrap items-center gap-3">
-          <Button>
-            Primary action
-            <ArrowRight aria-hidden="true" className="rtl:rotate-180" />
+          <Button endIcon={<ArrowRight className="rtl:rotate-180" />}>Continue</Button>
+          <Button variant="secondary" startIcon={<Plus />}>
+            Add resource
           </Button>
-          <Button variant="secondary">Secondary</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="danger">Delete</Button>
           <Button disabled>Disabled</Button>

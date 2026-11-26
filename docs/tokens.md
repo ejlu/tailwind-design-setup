@@ -11,7 +11,7 @@ Runtime variables are prefixed `--ui-`. `themes/warm.css` supplies the default v
 | `border`                                                             | Decorative separators. Not a substitute for an essential control boundary.                                                        |
 | `input-border`                                                       | Essential input/control boundaries on neutral surfaces.                                                                           |
 | `action`, `action-hover`, `on-action`                                | Primary action surfaces and their foreground. Both backgrounds must work with `on-action`.                                        |
-| `hover`, `pressed`                                                   | Neutral interaction surfaces. These do not represent persistent selection.                                                        |
+| `hover`, `pressed`                                                   | Neutral interaction surfaces. A highlighted menu action uses `fg` on `hover`.                                                     |
 | `selected`, `on-selected`, `selection-border`, `on-selection-border` | Persistent selection surface, text, and control indicator. Checked switch thumbs use `on-selection-border` on `selection-border`. |
 | `focus`                                                              | Focus outline on neutral surfaces. Outline offset separates it from solid button backgrounds.                                     |
 | `danger`, `danger-hover`, `on-danger`                                | Destructive action surfaces and their foreground.                                                                                 |
@@ -24,7 +24,7 @@ Allowed pair verification is in `tests/browser/system.spec.ts`: normal text targ
 
 ## Company adapter
 
-Keep the role names stable and alias your host company's variables into them. Load the adapter after the starter themes. This partial example changes only action and typography; all other roles retain the starter values:
+Keep the role names stable and alias your host company's variables into them. Load the adapter after the starter themes. This example maps action colors, typography, and control corners to the host theme.
 
 ```css
 [data-ui-theme="warm"] {
@@ -32,6 +32,7 @@ Keep the role names stable and alias your host company's variables into them. Lo
   --ui-action-hover: var(--company-action-hover);
   --ui-on-action: var(--company-action-foreground);
   --ui-font-sans: var(--company-font-body);
+  --ui-weight-heading: var(--company-heading-weight);
   --ui-radius-control: var(--company-radius-control);
 }
 
@@ -49,6 +50,7 @@ The example assumes those company variables exist. For an entirely new theme, du
 
 - `--ui-radius-control`, `--ui-radius-panel`: company shape language. Truly circular shapes use `rounded-full` independently.
 - `--ui-font-sans`: local font stack for each theme; `font-mono` has a separate local fallback.
+- `--ui-weight-heading` sets the weight for display, title, and heading. Warm requests semibold (600) from its system stack. Crisp requests Arial Bold (700). Choose a weight your host font supplies and compare the Workspace settings heading in both themes.
 - `type-display`, `type-title`, `type-heading`, `type-body`, `type-label`, `type-caption`, `type-eyebrow`: full type recipes. Change size, line height, tracking, and weight together in the bridge. Preserve native heading structure separately.
 - `--ui-space-group`, `--ui-space-section`: related content versus separation between sections. Normal Tailwind spacing remains available for page layouts.
 - `--ui-control-height`, `--ui-control-px`, `--ui-control-gap`, `--ui-row-py`: density only. Comfortable controls are 44px high and compact controls 36px at a 16px root. Native checkbox/radio hit areas are 24px. Do not change the root font size to implement density.

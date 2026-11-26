@@ -223,8 +223,7 @@ export function App() {
                   }}
                 >
                   <DialogTrigger asChild>
-                    <Button variant="secondary" className="mt-2">
-                      <Users aria-hidden="true" />
+                    <Button variant="secondary" className="mt-2" startIcon={<Users />}>
                       Invite teammate
                     </Button>
                   </DialogTrigger>
